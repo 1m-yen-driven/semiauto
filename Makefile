@@ -1,7 +1,4 @@
 SHELL=/bin/bash
-ifndef (MAKE_ENV_LOADED)
-. ./env.sh make $*
-endif
 
 .PHONY: all
 all: ssh_config initial_settings distribute_deploy_key git_sync

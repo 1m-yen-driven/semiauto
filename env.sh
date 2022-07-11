@@ -1,13 +1,13 @@
 #!/bin/bash
 
-shopt -s expand_aliases
-
 export ISUCON=isucon10f-renshuu
 
 # mac
 if [[ "$(uname)" == "Darwin" ]]; then
-  alias readlink="greadlink" # `brew install coreutils`
-  alias sed="gsed" # `brew install gnu-sed`
+    # `brew install coreutils`
+    function readlink {
+        greadlink "$@"
+    }
 fi
 
 # ssh config
@@ -24,11 +24,11 @@ export ISUCON_USER=isucon
 export DEPLOY_KEY_SECRET=$(readlink -f ./id_rsa)
 export DEPLOY_KEY_PUBLIC=$(readlink -f ./id_rsa.pub)
 
+# git config
+export GIT_ROOT=/home/isucon/webapp
+
 # GitHub config
 export REPO="git@github.com:1m-yen-driven/${ISUCON}.git"
 
 # common
 alias ssh="ssh -o ClearAllForwardings=yes -tt"
-
-# make config
-export MAKE_ENV_LOADED=1

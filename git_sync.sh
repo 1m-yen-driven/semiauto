@@ -13,12 +13,12 @@ GIT_ROOT=$(\
     ' \
   | sort -n | cut -f 2 | peco --prompt "GIT_ROOT:" | cat -)
 
-read -p "Show files in \$GITROOT? [Y/n]:" yn
+read -p "Show files in \$GIT_ROOT? [Y/n]:" yn
 case "$yn" in [nN]*) ;; *) ssh ${APP_NAMES[0]} "ls $GIT_ROOT" ;; esac
 
 read -p "Save GIT_ROOT=${GIT_ROOT}; ok? [y/N]:" yn
 case "$yn" in [yY]*) ;; *) echo "abort." ; exit 1;; esac
-sed -i -e "s:export GIT_ROOT=.*:export GITROOT=${GIT_ROOT}:g" ./env.sh
+perl -i -pe "s:export GIT_ROOT=.*:export GIT_ROOT=${GIT_ROOT}:g" ./env.sh
 
 git_init=$(mktemp)
 cat <<EOF >$git_init
@@ -41,8 +41,8 @@ for ((i = 1; i < ${#APP_NAMES[@]}; i++)) {
   cat <<EOF >$git_sync
     mv "${GIT_ROOT}" "${GIT_ROOT}.backup"
     git config --global user.name "${APP_NAMES[$i]}"
-    git config --global user.email "${APP_NAMES[$i]@example.com}"
-    git clone "$REPO" "$GIT_ROOT"
+    git config --global user.email "${APP_NAMES[$i]}@example.com"
+    git -c core.sshCommand="ssh -o 'StrictHostKeyChecking=no' -F /dev/null" clone "$REPO" "$GIT_ROOT"
     rsync -a "${GIT_ROOT}.backup/" "${GIT_ROOT}/"
 EOF
   scp $git_sync "${APP_NAMES[$i]}":/tmp/git_sync
