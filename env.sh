@@ -22,7 +22,6 @@ export ISUCON_USER=isucon
 
 # deploy config
 export DEPLOY_KEY_SECRET=$(readlink -f ./id_rsa)
-export DEPLOY_KEY_PUBLIC=$(readlink -f ./id_rsa.pub)
 
 # git config
 export GIT_ROOT=/home/isucon/webapp
